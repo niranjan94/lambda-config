@@ -19,7 +19,7 @@ REQUIRES_PYTHON = '>=3.6.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'boto3', 'aws-xray-sdk', 'PyYAML'
+    'PyYAML'
 ]
 
 EXTRAS = {}
