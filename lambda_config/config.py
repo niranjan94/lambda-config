@@ -28,9 +28,10 @@ def load_config() -> Dict:
 
 
 def load_config_for_ssm_path(path: str) -> Dict:
+
     try:
         client = boto3.client('ssm')
-        config_data = client.get_parameter(path, WithDecryption=True)['Parameter']['Value']
+        config_data = client.get_parameter(os.path.expandvars(path), WithDecryption=True)['Parameter']['Value']
     except:
         print(f'failed to load config from SSM path {path}')
         traceback.print_exc()
