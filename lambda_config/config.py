@@ -7,7 +7,10 @@ import yaml
 from configparser import RawConfigParser
 from typing import Dict
 
+from lambda_config.utils import dict_merge
+
 ssm_path = os.getenv('SSM_PARAMETER_PATH').strip()
+ssm_paths = os.getenv('SSM_PARAMETER_PATHS').strip()
 ssm_config_type = os.getenv('SSM_CONFIG_TYPE').strip()
 
 
@@ -17,14 +20,19 @@ def load_config() -> Dict:
 
     :return:
     """
-    if ssm_path == '':
-        return {}
+    if ssm_path != '':
+        return load_config_for_ssm_path(ssm_path)
+    if ssm_paths != '':
+        return dict_merge({}, [load_config_for_ssm_path(path) for path in ssm_paths.split(',')])
+    return {}
 
+
+def load_config_for_ssm_path(path: str) -> Dict:
     try:
         client = boto3.client('ssm')
-        config_data = client.get_parameter(ssm_path, WithDecryption=True)['Parameter']['Value']
+        config_data = client.get_parameter(path, WithDecryption=True)['Parameter']['Value']
     except:
-        print(f'failed to load config from SSM path {ssm_path}')
+        print(f'failed to load config from SSM path {path}')
         traceback.print_exc()
         return {}
 
