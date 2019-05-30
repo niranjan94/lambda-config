@@ -23,7 +23,7 @@ def load_config() -> Dict:
     if ssm_path != '':
         return load_config_for_ssm_path(ssm_path)
     if ssm_paths != '':
-        return dict_merge({}, [load_config_for_ssm_path(path) for path in ssm_paths.split(',')])
+        return dict_merge({}, [load_config_for_ssm_path(path.strip()) for path in ssm_paths.split(',')])
     return {}
 
 
