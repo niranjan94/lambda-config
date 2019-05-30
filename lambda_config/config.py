@@ -9,9 +9,9 @@ from typing import Dict
 
 from lambda_config.utils import dict_merge
 
-ssm_path = os.getenv('SSM_PARAMETER_PATH').strip()
-ssm_paths = os.getenv('SSM_PARAMETER_PATHS').strip()
-ssm_config_type = os.getenv('SSM_CONFIG_TYPE').strip()
+ssm_path = os.getenv('SSM_PARAMETER_PATH', '').strip()
+ssm_paths = os.getenv('SSM_PARAMETER_PATHS', '').strip()
+ssm_config_type = os.getenv('SSM_CONFIG_TYPE', '').strip()
 
 
 def load_config() -> Dict:
