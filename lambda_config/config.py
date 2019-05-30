@@ -38,12 +38,17 @@ def load_config_for_ssm_path(path: str) -> Dict:
         traceback.print_exc()
         return {}
 
-    if ssm_config_type == 'yaml':
-        return load_config_from_yaml(config_data)
-    if ssm_config_type == 'json':
-        return load_config_from_json(config_data)
-    if ssm_config_type == 'ini':
-        return load_config_from_ini(config_data)
+    try:
+        if ssm_config_type == 'yaml':
+            return load_config_from_yaml(config_data)
+        if ssm_config_type == 'json':
+            return load_config_from_json(config_data)
+        if ssm_config_type == 'ini':
+            return load_config_from_ini(config_data)
+    except Exception:
+        print(f'failed to parse config from SSM path {resolved_path}')
+        traceback.print_exc()
+        pass
     return {
         'data': config_data
     }
@@ -56,7 +61,7 @@ def load_config_from_yaml(config_data: str) -> Dict:
     :param config_data:
     :return:
     """
-    return yaml.load(config_data)
+    return yaml.load(config_data, Loader=yaml.FullLoader)
 
 
 def load_config_from_json(config_data: str) -> Dict:
